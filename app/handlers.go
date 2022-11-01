@@ -2,7 +2,8 @@ package app
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
+	"microservicesAPIDevInGolang/service"
 	"net/http"
 )
 
@@ -12,16 +13,21 @@ type Customer struct {
 	Zipcode string `json:"zip_code"`
 }
 
-func greet(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello World!")
+// Privary portのServiceとの依存性を定義
+type CustomerHandlers struct {
+	service service.CustomerService
 }
 
-func getAllCustomers(w http.ResponseWriter, r *http.Request) {
-	customers := []Customer{
-		{"Abby", "London", "000-7637"},
-		{"Bobby", "Paris", "012-7637"},
-	}
+func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
+	// customers := []Customer{
+	// 	{"Abby", "London", "000-7637"},
+	// 	{"Bobby", "Paris", "012-7637"},
+	// }
 
+	customers, err := ch.service.GetAllCustomer()
+	if err != nil {
+		log.Fatalln(err)
+	}
 	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(customers)
 }
