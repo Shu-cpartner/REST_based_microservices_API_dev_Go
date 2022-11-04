@@ -1,12 +1,15 @@
 package service
 
-import "microservicesAPIDevInGolang/domain"
+import (
+	"microservicesAPIDevInGolang/domain"
+	"microservicesAPIDevInGolang/errs"
+)
 
 // ServiceインタフェースとRepositoryインターフェース間のBusiness Logicの構築
 // Primary portのServiceインターフェースを作成　メソッドを入れる
 type CustomerService interface {
 	GetAllCustomer() ([]domain.Customer, error)
-	GetCustomer(string) (*domain.Customer, error)
+	GetCustomer(string) (*domain.Customer, *errs.AppError)
 }
 
 // Secondary portのRepositoryとの依存性を定義
@@ -18,7 +21,7 @@ func (s DefaultCustomService) GetAllCustomer() ([]domain.Customer, error) {
 	return s.repo.FindAll()
 }
 
-func (s DefaultCustomService) GetCustomer(id string) (*domain.Customer, error) {
+func (s DefaultCustomService) GetCustomer(id string) (*domain.Customer, *errs.AppError) {
 	return s.repo.ById(id)
 }
 

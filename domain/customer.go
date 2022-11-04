@@ -1,5 +1,7 @@
 package domain
 
+import "microservicesAPIDevInGolang/errs"
+
 type Customer struct {
 	Id          string
 	Name        string
@@ -12,5 +14,5 @@ type Customer struct {
 // Secondary portのRepositoryインターフェースを作成　メソッドを入れる
 type CustomerRepository interface {
 	FindAll() ([]Customer, error)
-	ById(string) (*Customer, error)
+	ById(string) (*Customer, *errs.AppError)
 }

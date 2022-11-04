@@ -22,11 +22,6 @@ type CustomerHandlers struct {
 }
 
 func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
-	// customers := []Customer{
-	// 	{"Abby", "London", "000-7637"},
-	// 	{"Bobby", "Paris", "012-7637"},
-	// }
-
 	customers, err := ch.service.GetAllCustomer()
 	if err != nil {
 		log.Fatalln(err)
@@ -40,8 +35,8 @@ func (ch *CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) 
 	id := vars["customer_id"]
 	customer, err := ch.service.GetCustomer(id)
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, err.Error())
+		w.WriteHeader(err.Code)
+		fmt.Fprintf(w, err.Message)
 	} else {
 		w.Header().Add("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(customer)
