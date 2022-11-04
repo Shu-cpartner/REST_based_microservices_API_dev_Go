@@ -6,6 +6,7 @@ import "microservicesAPIDevInGolang/domain"
 // Primary portのServiceインターフェースを作成　メソッドを入れる
 type CustomerService interface {
 	GetAllCustomer() ([]domain.Customer, error)
+	GetCustomer(string) (*domain.Customer, error)
 }
 
 // Secondary portのRepositoryとの依存性を定義
@@ -15,6 +16,10 @@ type DefaultCustomService struct {
 
 func (s DefaultCustomService) GetAllCustomer() ([]domain.Customer, error) {
 	return s.repo.FindAll()
+}
+
+func (s DefaultCustomService) GetCustomer(id string) (*domain.Customer, error) {
+	return s.repo.ById(id)
 }
 
 func NewCustomerService(repository domain.CustomerRepository) DefaultCustomService {
