@@ -8,7 +8,7 @@ import (
 // ServiceインタフェースとRepositoryインターフェース間のBusiness Logicの構築
 // Primary portのServiceインターフェースを作成　メソッドを入れる
 type CustomerService interface {
-	GetAllCustomer() ([]domain.Customer, error)
+	GetAllCustomer() ([]domain.Customer, *errs.AppError)
 	GetCustomer(string) (*domain.Customer, *errs.AppError)
 }
 
@@ -17,7 +17,7 @@ type DefaultCustomService struct {
 	repo domain.CustomerRepository
 }
 
-func (s DefaultCustomService) GetAllCustomer() ([]domain.Customer, error) {
+func (s DefaultCustomService) GetAllCustomer() ([]domain.Customer, *errs.AppError) {
 	return s.repo.FindAll()
 }
 
