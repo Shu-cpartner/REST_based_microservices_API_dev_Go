@@ -2,8 +2,10 @@ package domain
 
 import (
 	"database/sql"
+	"fmt"
 	"microservicesAPIDevInGolang/errs"
 	"microservicesAPIDevInGolang/logger"
+	"os"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -77,7 +79,13 @@ func (d CustomerRepositoryDb) ById(id string) (*Customer, *errs.AppError) {
 }
 
 func NewCustomerRepositoryDb() CustomerRepositoryDb {
-	client, err := sqlx.Open("mysql", "root:@tcp(localhost:3306)/banking")
+	dbUser := os.Getenv("DB_USER")
+	dbAddress := os.Getenv("DB_ADDRESS")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
+
+	dataSource := fmt.Sprintf("%s:@tcp(%s:%s)/%s", dbUser, dbAddress, dbPort, dbName)
+	client, err := sqlx.Open("mysql", dataSource)
 	if err != nil {
 		panic(err)
 	}
